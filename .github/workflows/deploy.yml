@@ -1,6 +1,14 @@
 name: .NET Continuous delivery
 on: push
 jobs:
+  deploy-template:
+    name: Deploy Bicep template to Azure
+    runs-on: ubuntu-latest
+    needs: build-container
+    steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
   build-container:
     name: Build and push Docker container image
     runs-on: ubuntu-latest
