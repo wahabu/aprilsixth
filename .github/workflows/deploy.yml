@@ -7,8 +7,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Checkout repository code
+      - uses: docker/login-action@v2
+        name: Login to ACR
+        with:
+          registry: reactoronthesixth.azurecr.io
+          username: ${{ secrets.DOCKER_REGISTRY_IDENTIFIER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       - uses: docker/build-push-action@v4
-        name: Build Docker container image
+        name: Build and push to ACR
         with:
           context: .
-          push: false
+          push: true
+          tags: |
+            reactoronthesixth.azurecr.io/aspnetrazor:latest
+            reactoronthesixth.azurecr.io/aspnetrazor:${{github.run_number }}
