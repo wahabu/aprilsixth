@@ -1,0 +1,14 @@
+name: .NET Continuous delivery
+on: push
+jobs:
+  build-container:
+    name: Build and push Docker container image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout repository code
+      - uses: docker/build-push-action@v4
+        name: Build Docker container image
+        with:
+          context: .
+          push: false
