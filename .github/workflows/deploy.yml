@@ -7,8 +7,19 @@ jobs:
     needs: build-container
     steps:
       - uses: azure/login@v1
+        name: Login to Azure CLI
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: actions/checkout@v3
+        name: Checkout external repository code
+        with:
+          repository: wahabu/aprilsixthdeploy
+      - run: |
+          az deployment group create \
+            --resource-group aprilsixth \
+            --template-file container.bicep \
+            --name autodeploy-${{ github.run_number }}
+        name: Deploy Bicep template using Azure CLI
   build-container:
     name: Build and push Docker container image
     runs-on: ubuntu-latest
